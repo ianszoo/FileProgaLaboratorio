@@ -100,4 +100,40 @@ public class CMDArchivos {
             return "Ha habido un error al escribir en el archivo: "+e.getMessage();
         }
     }
+    
+    public String copy(String inicio, String fin){
+        File orig=dir.resolverRuta(inicio);
+        File end=dir.resolverRuta(fin);
+        
+        if(!dir.dentroDeRaiz(orig)|| !dir.dentroDeRaiz(end)){
+            return "Acesso denegado";
+        }
+        
+        if (!orig.exists()){
+            return "Hay un error, el archivo de origen no existe";
+        }
+        
+        if (orig.isDirectory()){
+            return "Hay un error, solo se puede copiar archivos indivuales y no una carpeta.";
+        }
+        
+        if (end.isDirectory()){
+            end=new File(end,orig.getName());
+        }
+        
+        try{
+            FileReader file_r = new FileReader(orig);
+            FileWriter file_w = new FileWriter(end);
+            int a;
+            while ((a=file_r.read()) !=-1){
+                file_w.write(a);
+            }
+            file_r.close();
+            file_w.close();
+            return "1 archivo copiado.";
+        } 
+        catch (Exception e){
+            return "Ha habido un error al copiar: "+e.getMessage();
+        }
+    }
 }
