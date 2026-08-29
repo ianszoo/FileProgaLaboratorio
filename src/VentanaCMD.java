@@ -41,6 +41,20 @@ public class VentanaCMD extends JFrame{
         JPanel panelInferior = new JPanel(new BorderLayout());
         panelInferior.setBackground(cFondo);
 
+    arrancarEntorno();
+
         setVisible(true);
     }
+
+    private void arrancarEntorno() {
+    }
+
+    private String obtenerRutaPrompt() {return "CMD";
+    }
+
+    public void actualizarPrompt() {}
+
+    public void imprimir(String texto) {}
+
+    
 }
