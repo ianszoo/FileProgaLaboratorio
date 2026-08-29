@@ -112,32 +112,194 @@ public class ComandosDiego {
 
     private String rm(String argumentos, Consola consola) {
         
-        return "";
+         String nombre = argumentos == null? "" : argumentos.trim();
+
+        if (nombre.isEmpty()) {
+            return "se uso: Rm <nombre>";
+        }
+
+        try {
+            File objetivo = consola.resolverRuta(nombre);
+
+            if (!consola.esHijoDirectoDeLaCarpetaActual(objetivo)) {
+                return "rm solamente puede eliminar un elemento " + "de la carpeta actual.";
+            }
+
+            if (!objetivo.exists()) {
+                return "El archivo o carpeta no existen";
+            }
+
+            if (!eliminarRec(objetivo, consola)) {
+                return "No se pudo eliminar completamente: " + objetivo.getName();
+            }
+
+            return "";
+        } 
+        catch (IOException ex) {
+            return "Error en Rm: " + ex.getMessage();
+        }
     }
+
+    private boolean eliminarRec(
+            File archivo,Consola contexto) throws IOException {
+
+        if (!contexto.DentroDeLaRaiz(archivo)) {
+            
+            return false;
+        }
+
+        if (archivo.isDirectory()) {
+            File[] contenido = archivo.listFiles();
+
+            if (contenido == null) {
+                
+                return false;
+            }
+
+            for (File elemento : contenido) {
+                if (!eliminarRec(elemento, contexto)) {
+                   
+                    return false;
+                
+            }
+            }
+        }
+    return archivo.delete();
+    }
+        
 
     private String cd(String argumentos, Consola consola) {
       
-        return "";
+        String nombre = argumentos == null? "": argumentos.trim();
+
+        if (nombre.isEmpty()) {
+            return "seUso: cd <nombre carpeta>";
+        }
+
+        try {
+            File carpeta = consola.resolverRuta(nombre);
+
+            if (!carpeta.exists()) {
+                return "El sistema no puede encontrar la ruta especificada.";
+            }
+
+            if (!carpeta.isDirectory()) {
+                return "La ruta indicada no es una carpeta.";
+            }
+
+            consola.cambiarCarpeta(carpeta);
+            return "";
+        } catch (IOException ex) {
+           
+            return "Error en cd: " + ex.getMessage();
+        }
     }
+
+        
+    
 
     private String anterior(String argumentos, Consola consola) {
        
-        return "";
+          if (argumentos != null && !argumentos.trim().isEmpty()) {
+            return "Uso: ..";
+        }
+
+        try {
+            if (!consola.regresar()) {
+                return "No se permite salir de la carpeta rai";
+            }
+
+            return "";
+           
+            
+        }
+        catch (IOException ex) {
+            
+            return "Error al regresar: " + ex.getMessage();
+        }
     }
+        
+
 
     private String date(String argumentos) {
       
-        return "";
+        if (argumentos != null && !argumentos.trim().isEmpty()) {
+            
+            return "se uso: Date";
+        }
+
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+        return formato.format(new java.util.Date());
+   
     }
 
     private String time(String argumentos) {
       
-        return "";
+          if (argumentos != null && !argumentos.trim().isEmpty()) { 
+              
+              return "se uso: Time";
+        }
+
+        SimpleDateFormat formato = new SimpleDateFormat("HH:MM:SS");
+
+        return formato.format(new java.util.Date());
+       
     }
 
     private String ren(String argumentos, Consola consola) {
        
-        return "";
+        String texto = argumentos == null ? "" : argumentos.trim();
+
+        if (texto.isEmpty()) {
+            return "SE Uso: Ren <actual> <nuevo>";
+        }
+
+        String[] partes = texto.split("\\s+");
+
+        if (partes.length != 2) {
+            return "se uso Ren <actual> <nuevo>";
+        }
+
+        String nombreActual = partes[0];
+        String nombreNuevo = partes[1];
+
+        if (nombreNuevo.equals(".") || nombreNuevo.equals("..")) {
+            
+            return "el renombramiento no es válido.";
+        }
+
+        try {
+            File origen = consola.resolverRuta(nombreActual);
+
+            if (!origen.exists()) {
+                return "el archivo o carpeta indicado no existen en el directorio";
+            }
+
+            if (consola.esHijoDirectoDeLaCarpetaActual(origen)) {
+                return "Ren solamente puede renombrar elementos " + "de la carpeta actual.";
+            }
+
+            File destino = consola.resolverRuta(nombreNuevo);
+
+            if (!consola.esHijoDirectoDeLaCarpetaActual(destino)) {
+                return "El nuevo nombre no puede contener una ruta.";
+            }
+
+            if (destino.exists()) {
+                return "Ya existe un archivo o carpeta " + "con esenombre.";
+            }
+
+            if (!origen.renameTo(destino)) {
+                return "No se pudieron renombrar el archivo o carpeta";
+            }
+
+            return "";
+            
+        } catch (IOException ex) {
+            return "Error en Ren: " + ex.getMessage();
+        }
+        
     }
 }
 
