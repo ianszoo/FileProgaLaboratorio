@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VentanaCMD extends JFrame{
 
@@ -44,7 +46,7 @@ public class VentanaCMD extends JFrame{
 
     arrancarEntorno();
 
-        labelPrompt = new JLabel(obtenerRutaPrompt());
+        labelPrompt = new JLabel(conseguirRutaPrompt());
         labelPrompt.setForeground(cTexto);
         labelPrompt.setFont(fuenteTexto);
         labelPrompt.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
@@ -62,18 +64,47 @@ public class VentanaCMD extends JFrame{
         campoEntradaTexto.addActionListener((ActionEvent e) -> {
             String comandoIngresado = campoEntradaTexto.getText();
             campoEntradaTexto.setText("");
-            setVisible(true);}
+            if (!comandoIngresado.trim().isEmpty()) {
+                imprimir(conseguirRutaPrompt() + comandoIngresado);
+                procesarComando(comandoIngresado);
+            }
+            campoEntradaTexto.requestFocusInWindow();
+        });
+
+        areaSalidaTexto.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                campoEntradaTexto.requestFocusInWindow();
+            }
+        });
     }
 
     private void arrancarEntorno() {
+        directorioRaiz = new File(System.getProperty("user.dir"), "CMD");
+        if (!directorioRaiz.exists()) {
+            directorioRaiz.mkdirs();
+        }
+        directorioActual = directorioRaiz;
     }
 
-    private String obtenerRutaPrompt() {return "CMD";
+    private String conseguirRutaPrompt() {
+        if (modoEscritura) {
+            return "> ";
+        }
+        String rutaRelativa = directorioActual.getAbsolutePath().substring(directorioRaiz.getAbsolutePath().length());
+        return "C:\\CMD_ProgramaciónII" + rutaRelativa + ">";
     }
 
-    public void actualizarPrompt() {}
+    public void actualizarPrompt() {
+        labelPrompt.setText(conseguirRutaPrompt());
 
-    public void imprimir(String texto) {}
+    }
+
+    public void imprimir(String texto) {
+        areaSalidaTexto.append(texto + "\n");
+        areaSalidaTexto.setCaretPosition(areaSalidaTexto.getDocument().getLength());
+    }
+
 
 
 }
