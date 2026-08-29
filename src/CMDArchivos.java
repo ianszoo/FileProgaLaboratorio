@@ -77,4 +77,27 @@ public class CMDArchivos {
             return "Ha habido un error al escribir en el archivo: "+e.getMessage();
         }
     }
+    
+    public String ap(String nombre, List<String> txt){
+        File f=dir.ResolverRuta(nombre);
+        
+        if(!dir.dentroDeRaiz(f)){
+            return "Acceso ha sido denegado";
+        }
+        if(f.isDirectory()){
+            return "Hay un error, no se puede escribir sobre una carpeta";
+        }
+        
+        try{
+            FileWriter file_w = new FileWriter(f, true);
+            for (String l : txt){
+                file_w.write(l+"\n");
+            }
+            file_w.close();
+            return "Contenido agregado exitosamente.";
+        } 
+        catch (Exception e) {
+            return "Ha habido un error al escribir en el archivo: "+e.getMessage();
+        }
+    }
 }
