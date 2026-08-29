@@ -58,7 +58,7 @@ public class ComandosDiego {
             File carpeta = consola.resolverRuta(nombre);
 
             if (!consola.esHijoDirectoDeLaCarpetaActual(carpeta)) {
-                return "Mkdir solamente puede crear una crpeta " + " dentro de la carpeta actual.";
+                return "Mkdir solamente puede crear una carpeta " + " dentro de la carpeta actual.";
             }
 
             if (carpeta.exists()) {
@@ -176,7 +176,7 @@ public class ComandosDiego {
         String nombre = argumentos == null? "": argumentos.trim();
 
         if (nombre.isEmpty()) {
-            return "seUso: cd <nombre carpeta>";
+            return "Se uso: cd <nombre carpeta>";
         }
 
         try {
@@ -209,7 +209,7 @@ public class ComandosDiego {
 
         try {
             if (!consola.regresar()) {
-                return "No se permite salir de la carpeta rai";
+                return "No se permite salir de la carpeta raiz";
             }
 
             return "";
@@ -255,7 +255,7 @@ public class ComandosDiego {
         String texto = argumentos == null ? "" : argumentos.trim();
 
         if (texto.isEmpty()) {
-            return "SE Uso: Ren <actual> <nuevo>";
+            return "Se uso: Ren <actual> <nuevo>";
         }
 
         String[] partes = texto.split("\\s+");
@@ -290,7 +290,7 @@ public class ComandosDiego {
             }
 
             if (destino.exists()) {
-                return "Ya existe un archivo o carpeta " + "con esenombre.";
+                return "Ya existe un archivo o carpeta " + "con ese nombre.";
             }
 
             if (!origen.renameTo(destino)) {

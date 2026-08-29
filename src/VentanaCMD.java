@@ -202,80 +202,90 @@ public class VentanaCMD extends JFrame{
                 break;
 
             case "mkdir": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Mkdir", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Mkdir", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "mfile": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Mfile", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Mfile", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "rm": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Rm", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Rm", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "cd": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Cd", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Cd", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "..": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("..", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("..", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "date": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Date", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Date", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "time": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Time", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Time", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
             }
 
             case "ren": {
-                String argumentosDiego = entrada.substring(comando.length()).trim();
-                String resultadoDiego = comandosDiego.ejecutar("Ren", argumentosDiego, consola);
-                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
-                    imprimir(resultadoDiego);
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Ren", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "dir": {
+                String argumentos = entrada.substring(comando.length()).trim();
+                String resultado = comandosDiego.ejecutar("Dir", argumentos, consola);
+                if (resultado != null && !resultado.isEmpty()) {
+                    imprimir(resultado);
                 }
                 actualizarPrompt();
                 break;
