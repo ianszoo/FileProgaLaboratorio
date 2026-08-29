@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
 
 public class VentanaCMD extends JFrame{
 
     private JTextArea areaSalidaTexto;
-    private JTextField campoEntrada;
+    private JTextField campoEntradaTexto;
     private JLabel labelPrompt;
     private File directorioRaiz;
     private File directorioActual;
@@ -43,7 +44,25 @@ public class VentanaCMD extends JFrame{
 
     arrancarEntorno();
 
-        setVisible(true);
+        labelPrompt = new JLabel(obtenerRutaPrompt());
+        labelPrompt.setForeground(cTexto);
+        labelPrompt.setFont(fuenteTexto);
+        labelPrompt.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+
+        campoEntradaTexto = new JTextField();
+        campoEntradaTexto.setBackground(cFondo);
+        campoEntradaTexto.setForeground(cTexto);
+        campoEntradaTexto.setFont(fuenteTexto);
+        campoEntradaTexto.setCaretColor(cTexto);
+        campoEntradaTexto.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+
+        panelInferior.add(labelPrompt, BorderLayout.WEST);
+        panelInferior.add(campoEntradaTexto, BorderLayout.CENTER);
+        add(panelInferior, BorderLayout.SOUTH);
+        campoEntradaTexto.addActionListener((ActionEvent e) -> {
+            String comandoIngresado = campoEntradaTexto.getText();
+            campoEntradaTexto.setText("");
+            setVisible(true);}
     }
 
     private void arrancarEntorno() {
@@ -56,5 +75,5 @@ public class VentanaCMD extends JFrame{
 
     public void imprimir(String texto) {}
 
-    
+
 }
