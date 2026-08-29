@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.ArrayList;
 
 public class VentanaCMD extends JFrame{
 
@@ -13,6 +15,11 @@ public class VentanaCMD extends JFrame{
     private File directorioRaiz;
     private File directorioActual;
     private boolean modoEscritura = false;
+    private CMDArchivos archivos;
+
+    private List<String> bufferTexto;
+    private String archivoActual;
+    private String comandoActual;
 
     public VentanaCMD() {
         setTitle("Símbolo del sistema simulado - Equipo 4");
@@ -66,7 +73,7 @@ public class VentanaCMD extends JFrame{
             campoEntradaTexto.setText("");
             if (!comandoIngresado.trim().isEmpty()) {
                 imprimir(conseguirRutaPrompt() + comandoIngresado);
-                procesarComando(comandoIngresado);
+                procesarComando();
             }
             campoEntradaTexto.requestFocusInWindow();
         });
@@ -77,6 +84,8 @@ public class VentanaCMD extends JFrame{
                 campoEntradaTexto.requestFocusInWindow();
             }
         });
+
+        setVisible(true);
     }
 
     private void arrancarEntorno() {
@@ -92,7 +101,7 @@ public class VentanaCMD extends JFrame{
             return "> ";
         }
         String rutaRelativa = directorioActual.getAbsolutePath().substring(directorioRaiz.getAbsolutePath().length());
-        return "C:\\CMD_ProgramaciónII" + rutaRelativa + ">";
+        return "C:\\CMD_ProgramacionII" + rutaRelativa + ">";
     }
 
     public void actualizarPrompt() {
@@ -105,6 +114,84 @@ public class VentanaCMD extends JFrame{
         areaSalidaTexto.setCaretPosition(areaSalidaTexto.getDocument().getLength());
     }
 
+    private void procesarComando(){
+        String entrada = campoEntradaTexto.getText().trim();
+
+        if (modoEscritura){
+            if(entrada.equalsIgnoreCase("EXIT")) {
+                modoEscritura = false;
+                String resultado = "";
+
+                if (comandoActual.equalsIgnoreCase("wr")) {
+                    resultado = archivos.wr(archivoActual, bufferTexto);
+                } else if (comandoActual.equalsIgnoreCase("ap")) {
+                    resultado = archivos.ap(archivoActual, bufferTexto);
+                }
+
+                imprimir(resultado);
+                actualizarPrompt();
+
+            } else {
+                bufferTexto.add(entrada);
+            }
+            return;
+        }
+        String[] partes = entrada.split("\\s+");
+        String comando = partes[0].toLowerCase();
+        String parametro1 = partes.length > 1 ? partes[1] : "";
+        String parametro2 = partes.length > 2 ? partes[2] : "";
+
+        switch (comando) {
+            case "rd":
+                imprimir(archivos.rd(parametro1));
+                break;
+            case "wr":
+            case "ap":
+                if (parametro1.isEmpty()) {
+                    imprimir("Error: Debe agregar un nombre de archivo.");
+                    break;
+                }
+                modoEscritura = true;
+                comandoActual = comando;
+                archivoActual = parametro1;
+                bufferTexto = new java.util.ArrayList<>();
+                imprimir("Modo de edición. Ingrese un texto. Escriba EXIT en mayúsculas para guardar y salir.");
+                actualizarPrompt();
+                break;
+
+            case "copy":
+                imprimir(archivos.copy(parametro1, parametro2));
+                break;
+
+            case "info":
+                imprimir(archivos.info(parametro1));
+                break;
+
+            case "find":
+                imprimir(archivos.find(parametro1));
+                break;
+
+            case "tree":
+                imprimir(archivos.tree());
+                break;
+
+            case "help":
+                imprimir(archivos.help());
+                break;
+
+            case "cls":
+                areaSalidaTexto.setText("");
+                break;
+
+            case "exit":
+                System.exit(0);
+                break;
+
+            default:
+                imprimir("'" + partes[0] + "' no es un comando válido.");
+                break;
+        }
+    }
 
 
 }
