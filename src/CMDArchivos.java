@@ -168,5 +168,34 @@ public class CMDArchivos {
         }
     }
     
+    public String find(String txt){
+        StringBuilder sb=new StringBuilder();
+        int found=buscar(dir.getActual(),txt.toLowerCase(),sb);
+        
+        if (found==0){
+            return "No se encontraron coincidencias para "+txt+".";
+        }
+        
+        sb.append("\nTotal encontrados: ").append(found);
+        return sb.toString();
+    }
+    
+    private int buscar(File carpeta, String texto, StringBuilder sb) {
+        int indx=0;
+        File[] hijos=carpeta.listFiles();
+        if (hijos!=null){
+            for (File f : hijos){
+                if (f.getName().toLowerCase().contains(texto)){
+                    sb.append(f.isDirectory() ? "(DIR)  ":"(FILE) ").append(f.getAbsolutePath()).append("\n");
+                    indx++;
+                }
+                if (f.isDirectory()){
+                    indx+=buscar(f,texto,sb);
+                }
+            }
+        }
+        return indx;
+    }
+    
     
 }
