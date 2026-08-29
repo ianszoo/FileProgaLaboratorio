@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -134,6 +135,38 @@ public class CMDArchivos {
         } 
         catch (Exception e){
             return "Ha habido un error al copiar: "+e.getMessage();
+        }  
+    }
+    public String info(String nombre) {
+        File file = dir.resolverRuta(nombre);
+
+        if (!dir.dentroDeRaiz(file)){
+            return "Acceso denegado por estar afuera de la raiz";
+        }
+
+        if (file.exists()) {
+            String salida="\nSI EXISTE\n\n";
+            salida+="Nombre: "+file.getName()+"\n";
+            salida+="Path: "+file.getPath()+"\n";
+            salida+="Absoluta: "+file.getAbsolutePath()+"\n";
+            File padre=file.getAbsoluteFile().getParentFile();
+            salida+="Padre: "+(padre!=null ? padre.getName() : "")+"\n";
+            salida+="Bytes: "+file.length()+"\n";
+
+            if (file.isFile()){
+                salida+="Es un archivo\n";
+            } 
+            else if (file.isDirectory()){
+                salida+="Es un folder\n";
+            }
+
+            salida += "Ultima modificacion: "+new Date(file.lastModified());
+            return salida;
+        } 
+        else{
+            return "Aun no existe";
         }
     }
+    
+    
 }
