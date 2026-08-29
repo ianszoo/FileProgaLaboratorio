@@ -37,6 +37,9 @@ public class ComandosDiego {
 
             case "Ren":
                 return ren(argumentos, consola);
+                
+            case "Dir":
+                return dir(argumentos, consola);
 
             default:
                 return null;
@@ -301,5 +304,49 @@ public class ComandosDiego {
         }
         
     }
+    
+    private String dir(String argumentos, Consola consola) {
+
+    if (argumentos != null && !argumentos.trim().isEmpty()) {
+        return "se uso: Dir";
+    }
+
+    File carpetaActual = consola.getCarpetaActual();
+    
+    File[] elementos = carpetaActual.listFiles();
+
+    if (elementos == null) {
+      
+        return "No se pudo obtener contenido de la carpeta actual";
+    }
+
+    StringBuilder salida = new StringBuilder();
+
+    salida.append("Directorio de ")
+            
+            .append(carpetaActual.getPath())
+           
+            .append("\n\n");
+
+    if (elementos.length == 0) {
+        salida.append("esta carpeta esta vacia");
+       
+        return salida.toString();
+    }
+
+    for (File elemento : elementos) {
+        if (elemento.isDirectory()) {
+            salida.append("<DIR>     ");
+        } 
+        
+        else {
+            salida.append("          ");
+        }
+
+        salida.append(elemento.getName()).append("\n");
+    }
+
+    return salida.toString();
+}
 }
 
