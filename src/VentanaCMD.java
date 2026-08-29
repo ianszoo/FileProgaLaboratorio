@@ -20,9 +20,11 @@ public class VentanaCMD extends JFrame{
     private List<String> bufferTexto;
     private String archivoActual;
     private String comandoActual;
+    private Consola consola;
+    private ComandosDiego comandosDiego;
 
     public VentanaCMD() {
-        setTitle("Símbolo del sistema simulado - Equipo 4");
+        setTitle("CMD Programación II - Equipo 2");
         setMinimumSize(new Dimension(700,450));
         setSize(900,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,6 +54,13 @@ public class VentanaCMD extends JFrame{
         panelInferior.setBackground(cFondo);
 
     arrancarEntorno();
+        try {
+            consola = new Consola(directorioRaiz);
+            archivos = new CMDArchivos(consola);
+            comandosDiego = new ComandosDiego();
+        } catch (Exception ex) {
+            imprimir("Error al iniciar consola: " + ex.getMessage());
+        }
 
         labelPrompt = new JLabel(conseguirRutaPrompt());
         labelPrompt.setForeground(cTexto);
@@ -70,11 +79,11 @@ public class VentanaCMD extends JFrame{
         add(panelInferior, BorderLayout.SOUTH);
         campoEntradaTexto.addActionListener((ActionEvent e) -> {
             String comandoIngresado = campoEntradaTexto.getText();
-            campoEntradaTexto.setText("");
             if (!comandoIngresado.trim().isEmpty()) {
                 imprimir(conseguirRutaPrompt() + comandoIngresado);
                 procesarComando();
             }
+            campoEntradaTexto.setText("");
             campoEntradaTexto.requestFocusInWindow();
         });
 
@@ -97,10 +106,9 @@ public class VentanaCMD extends JFrame{
     }
 
     private String conseguirRutaPrompt() {
-        if (modoEscritura) {
-            return "> ";
-        }
-        String rutaRelativa = directorioActual.getAbsolutePath().substring(directorioRaiz.getAbsolutePath().length());
+        if (modoEscritura) return "> ";
+        if (consola == null) return "C:\\CMD_ProgramacionII>";
+        String rutaRelativa = consola.getCarpetaActual().getAbsolutePath().substring(directorioRaiz.getAbsolutePath().length());
         return "C:\\CMD_ProgramacionII" + rutaRelativa + ">";
     }
 
@@ -114,11 +122,11 @@ public class VentanaCMD extends JFrame{
         areaSalidaTexto.setCaretPosition(areaSalidaTexto.getDocument().getLength());
     }
 
-    private void procesarComando(){
+    private void procesarComando() {
         String entrada = campoEntradaTexto.getText().trim();
 
-        if (modoEscritura){
-            if(entrada.equalsIgnoreCase("EXIT")) {
+        if (modoEscritura) {
+            if (entrada.equalsIgnoreCase("EXIT")) {
                 modoEscritura = false;
                 String resultado = "";
 
@@ -136,7 +144,12 @@ public class VentanaCMD extends JFrame{
             }
             return;
         }
+
         String[] partes = entrada.split("\\s+");
+        if (partes.length == 0 || partes[0].isEmpty()) {
+            return;
+        }
+
         String comando = partes[0].toLowerCase();
         String parametro1 = partes.length > 1 ? partes[1] : "";
         String parametro2 = partes.length > 2 ? partes[2] : "";
@@ -145,6 +158,7 @@ public class VentanaCMD extends JFrame{
             case "rd":
                 imprimir(archivos.rd(parametro1));
                 break;
+
             case "wr":
             case "ap":
                 if (parametro1.isEmpty()) {
@@ -186,6 +200,86 @@ public class VentanaCMD extends JFrame{
             case "exit":
                 System.exit(0);
                 break;
+
+            case "mkdir": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Mkdir", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "mfile": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Mfile", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "rm": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Rm", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "cd": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Cd", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "..": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("..", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "date": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Date", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "time": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Time", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
+
+            case "ren": {
+                String argumentosDiego = entrada.substring(comando.length()).trim();
+                String resultadoDiego = comandosDiego.ejecutar("Ren", argumentosDiego, consola);
+                if (resultadoDiego != null && !resultadoDiego.isEmpty()) {
+                    imprimir(resultadoDiego);
+                }
+                actualizarPrompt();
+                break;
+            }
 
             default:
                 imprimir("'" + partes[0] + "' no es un comando válido.");
